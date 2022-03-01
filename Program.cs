@@ -1,11 +1,22 @@
+using bagit_api.Hubs;
 var builder = WebApplication.CreateBuilder(args);
+var AllowOrigins = "_allowOrigins";
 
 // Add services to the container.
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowOrigins,
+                      builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                      );
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -18,8 +29,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(AllowOrigins);
+
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ListHub>("/listHub");
 
 app.Run();
