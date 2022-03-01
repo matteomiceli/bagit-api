@@ -6,28 +6,19 @@ namespace bagit_api.Hubs;
 
 public class ListHub : Hub
 {
-    public BagList Baglist;
-    public ListHub()
+   
+    public async Task AddItemToList(string itemName, string quantity)
     {
-        var list = new BagList()
-        {
-            Owner = "Matteo",
-            Items = new List<Item>(),
-        };
-        this.Baglist = list;
-    }
-    public async Task AddItemToList(string user, string itemName, int quantity)
-    {
-        this.Baglist.AddItem(new Item
+        TestList.List.AddItem(new Item
         {
             Name = itemName,
-            Quantity = quantity
+            Quantity = int.Parse(quantity)
         });
-        await Clients.All.SendAsync("ItemsUpdated", Baglist.GetList());
+        await Clients.All.SendAsync("ItemsUpdated", TestList.List.GetList().ToArray());
     }
-    public async Task RemoveItemFromList(string user, int id)
+    public async Task RemoveItemFromList(string name)
     {
-        this.Baglist.DeleteItem(id);
-        await Clients.All.SendAsync("ItemsUpdated", Baglist.GetList());
+        TestList.List.DeleteItem(name);
+        await Clients.All.SendAsync("ItemsUpdated", TestList.List.GetList());
     }
 }
