@@ -4,6 +4,7 @@ const nameText = document.getElementById("name-text");
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl("https://localhost:7210/listHub")
+  .withAutomaticReconnect()
   .build();
 
 connection
@@ -18,3 +19,5 @@ newBtn.addEventListener("click", (e) => {
     connection.invoke("AddItemToList", nameText.value, 1);
   }
 });
+
+console.log(connection);

@@ -7,9 +7,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowOrigins,
                       builder => builder
-                        .AllowAnyOrigin()
+                        .WithOrigins("http://127.0.0.1:5500")
                         .AllowAnyHeader()
-                        .WithMethods("GET", "POST")
+                        .AllowAnyMethod() 
                         .AllowCredentials()
                       );
 });
@@ -28,7 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors(AllowOrigins);
 
