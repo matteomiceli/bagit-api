@@ -9,7 +9,8 @@ builder.Services.AddCors(options =>
                       builder => builder
                         .AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyMethod()
+                        .WithMethods("GET", "POST")
+                        .AllowCredentials()
                       );
 });
 builder.Services.AddControllers();
