@@ -2,6 +2,7 @@ let list = document.getElementById("list");
 const form = document.getElementById("form");
 const newBtn = document.getElementById("btn-new");
 const nameText = document.getElementById("name-text");
+const deleteBtns = document.getElementsByTagName("li");
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl("https://localhost:7210/listHub")
@@ -29,13 +30,18 @@ newBtn.addEventListener("click", (e) => {
   }
 });
 
+function deleteSelf(button) {
+  console.log(button.value);
+  connection.invoke("RemoveItemFromList", button.value);
+}
+
 function appendList(listArray) {
   list.remove();
   list = document.createElement("ul");
   form.appendChild(list);
   listArray.forEach((item) => {
     const li = document.createElement("li");
-    li.innerHTML = `${item.name}`;
+    li.innerHTML = `${item.name}---<button onclick="deleteSelf(this)" value="${item.name}">X</button>`;
     list.appendChild(li);
   });
 }
