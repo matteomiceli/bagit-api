@@ -47,5 +47,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<ListHub>("/listHub");
+SeedData.Initialize(app);
+
 
 app.Run();
