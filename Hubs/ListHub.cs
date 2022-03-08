@@ -6,13 +6,13 @@ namespace bagit_api.Hubs;
 
 public class ListHub : Hub
 {
-   
     public async Task AddItemToList(string itemName, string quantity)
     {
-        TestList.List.AddItem(new Item
+        TestList.List.AddItem(new Product
         {
             Name = itemName,
-            Quantity = int.Parse(quantity)
+            Quantity = int.Parse(quantity),
+            MockShoppingListId = 1
         });
         await Clients.All.SendAsync("ItemsUpdated", TestList.List.GetList().ToArray());
     }

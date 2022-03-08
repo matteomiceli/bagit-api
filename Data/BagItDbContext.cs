@@ -17,7 +17,8 @@ public class BagItDbContext : IdentityDbContext
         // modelBuilder.Entity<Game>().HasData(SeedData.GetGames());
     }
     
-    public DbSet<User> Users { get; set; }
+    // public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
-    public DbSet<ShoppingList> Lists { get; set; }
+    // public DbSet<ShoppingList> ShoppingLists { get; set; }
+    public DbSet<MockShoppingList> MockShoppingList { get; set; }
 }
