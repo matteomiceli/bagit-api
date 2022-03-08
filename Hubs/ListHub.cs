@@ -21,4 +21,8 @@ public class ListHub : Hub
         TestList.List.DeleteItem(name);
         await Clients.All.SendAsync("ItemsUpdated", TestList.List.GetList());
     }
+
+    public async Task GetList(string Id) {
+        await Clients.All.SendAsync("ItemsUpdated", TestList.List.GetList());
+    }
 }

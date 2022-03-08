@@ -13,7 +13,8 @@ connection
     .start()
     .then(() => {
         console.log("connected");
-        // invoke a get all list items function
+        // invoke a get all list items function on load
+        connection.invoke("GetList", "listId");
     })
     .catch((e) => console.log(e));
 
