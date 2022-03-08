@@ -10,6 +10,8 @@ public class Product
     public string? Icon { get; set; }
     public string? Category { get; set; }
     public string? Description { get; set; }
-    
-    public virtual ICollection<ShoppingList> Lists { get; set; }
+    public int? Quantity { get; set; }
+
+    public int MockShoppingListId { get; set; }
+    public MockShoppingList MockShoppingList { get; set; }
 }

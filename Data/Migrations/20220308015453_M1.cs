@@ -49,40 +49,20 @@ namespace bagit_api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "MockShoppingList",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ListId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Icon = table.Column<string>(type: "TEXT", nullable: true),
-                    Category = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Notes = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    IsPublic = table.Column<bool>(type: "INTEGER", nullable: true),
+                    IsEditable = table.Column<bool>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Username = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", nullable: true),
-                    Password = table.Column<string>(type: "TEXT", nullable: true),
-                    Address = table.Column<string>(type: "TEXT", nullable: true),
-                    Phone = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.PrimaryKey("PK_MockShoppingList", x => x.ListId);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,49 +172,26 @@ namespace bagit_api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lists",
+                name: "Products",
                 columns: table => new
                 {
-                    ListId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Notes = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Icon = table.Column<string>(type: "TEXT", nullable: true),
+                    Category = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    IsPublic = table.Column<bool>(type: "INTEGER", nullable: true),
-                    IsEditable = table.Column<bool>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: true),
+                    MockShoppingListId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lists", x => x.ListId);
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_Lists_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductShoppingList",
-                columns: table => new
-                {
-                    ListsListId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductsProductId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductShoppingList", x => new { x.ListsListId, x.ProductsProductId });
-                    table.ForeignKey(
-                        name: "FK_ProductShoppingList_Lists_ListsListId",
-                        column: x => x.ListsListId,
-                        principalTable: "Lists",
+                        name: "FK_Products_MockShoppingList_MockShoppingListId",
+                        column: x => x.MockShoppingListId,
+                        principalTable: "MockShoppingList",
                         principalColumn: "ListId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductShoppingList_Products_ProductsProductId",
-                        column: x => x.ProductsProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -276,14 +233,9 @@ namespace bagit_api.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lists_UserId",
-                table: "Lists",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductShoppingList_ProductsProductId",
-                table: "ProductShoppingList",
-                column: "ProductsProductId");
+                name: "IX_Products_MockShoppingListId",
+                table: "Products",
+                column: "MockShoppingListId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -304,7 +256,7 @@ namespace bagit_api.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ProductShoppingList");
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -313,13 +265,7 @@ namespace bagit_api.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Lists");
-
-            migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
-                name: "Users");
+                name: "MockShoppingList");
         }
     }
 }

@@ -17,31 +17,7 @@ namespace bagit_api.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
 
-            modelBuilder.Entity("bagit_api.Models.Product", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Category")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Icon")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("bagit_api.Models.ShoppingList", b =>
+            modelBuilder.Entity("bagit_api.Models.MockShoppingList", b =>
                 {
                     b.Property<int>("ListId")
                         .ValueGeneratedOnAdd()
@@ -62,52 +38,41 @@ namespace bagit_api.Data.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ListId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Lists");
+                    b.ToTable("MockShoppingList");
                 });
 
-            modelBuilder.Entity("bagit_api.Models.User", b =>
+            modelBuilder.Entity("bagit_api.Models.Product", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Category")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Icon")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
+                    b.Property<int>("MockShoppingListId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("TEXT");
+                    b.HasKey("ProductId");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("TEXT");
+                    b.HasIndex("MockShoppingListId");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Users");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -302,26 +267,15 @@ namespace bagit_api.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ProductShoppingList", b =>
+            modelBuilder.Entity("bagit_api.Models.Product", b =>
                 {
-                    b.Property<int>("ListsListId")
-                        .HasColumnType("INTEGER");
+                    b.HasOne("bagit_api.Models.MockShoppingList", "MockShoppingList")
+                        .WithMany("Products")
+                        .HasForeignKey("MockShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ListsListId", "ProductsProductId");
-
-                    b.HasIndex("ProductsProductId");
-
-                    b.ToTable("ProductShoppingList");
-                });
-
-            modelBuilder.Entity("bagit_api.Models.ShoppingList", b =>
-                {
-                    b.HasOne("bagit_api.Models.User", null)
-                        .WithMany("Lists")
-                        .HasForeignKey("UserId");
+                    b.Navigation("MockShoppingList");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -375,24 +329,9 @@ namespace bagit_api.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProductShoppingList", b =>
+            modelBuilder.Entity("bagit_api.Models.MockShoppingList", b =>
                 {
-                    b.HasOne("bagit_api.Models.ShoppingList", null)
-                        .WithMany()
-                        .HasForeignKey("ListsListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("bagit_api.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("bagit_api.Models.User", b =>
-                {
-                    b.Navigation("Lists");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
