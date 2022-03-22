@@ -8,9 +8,10 @@ public class ShoppingList
     public int ListId { get; set; }
     public string? Name { get; set; }
     public string? Notes { get; set; }
-    public string? Description { get; set; }
     public bool? IsPublic { get; set; }
     public bool? IsEditable { get; set; }
+    public string? Description { get; set; }
     
-    public virtual ICollection<Product> Products { get; set; }
+    public List<UserShoppingList> UserShoppingLists { get; set; }
+    public List<ShoppingListProduct> ShoppingListProducts { get; set; }
 }

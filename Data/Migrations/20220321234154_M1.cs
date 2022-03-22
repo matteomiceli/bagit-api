@@ -49,20 +49,58 @@ namespace bagit_api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MockShoppingList",
+                name: "Products",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Icon = table.Column<string>(type: "TEXT", nullable: true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: true),
+                    Category = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingLists",
                 columns: table => new
                 {
                     ListId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Notes = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     IsPublic = table.Column<bool>(type: "INTEGER", nullable: true),
-                    IsEditable = table.Column<bool>(type: "INTEGER", nullable: true)
+                    IsEditable = table.Column<bool>(type: "INTEGER", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MockShoppingList", x => x.ListId);
+                    table.PrimaryKey("PK_ShoppingLists", x => x.ListId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Username = table.Column<string>(type: "TEXT", maxLength: 70, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    Password = table.Column<string>(type: "TEXT", nullable: true),
+                    Address = table.Column<string>(type: "TEXT", nullable: true),
+                    Phone = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -172,26 +210,50 @@ namespace bagit_api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "ShoppingListProduct",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Icon = table.Column<string>(type: "TEXT", nullable: true),
-                    Category = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: true),
-                    MockShoppingListId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ListId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.PrimaryKey("PK_ShoppingListProduct", x => new { x.ListId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_Products_MockShoppingList_MockShoppingListId",
-                        column: x => x.MockShoppingListId,
-                        principalTable: "MockShoppingList",
+                        name: "FK_ShoppingListProduct_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingListProduct_ShoppingLists_ListId",
+                        column: x => x.ListId,
+                        principalTable: "ShoppingLists",
                         principalColumn: "ListId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserShoppingList",
+                columns: table => new
+                {
+                    ListId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserShoppingList", x => new { x.ListId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserShoppingList_ShoppingLists_ListId",
+                        column: x => x.ListId,
+                        principalTable: "ShoppingLists",
+                        principalColumn: "ListId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserShoppingList_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -233,9 +295,14 @@ namespace bagit_api.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_MockShoppingListId",
-                table: "Products",
-                column: "MockShoppingListId");
+                name: "IX_ShoppingListProduct_ProductId",
+                table: "ShoppingListProduct",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserShoppingList_UserId",
+                table: "UserShoppingList",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -256,7 +323,10 @@ namespace bagit_api.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "ShoppingListProduct");
+
+            migrationBuilder.DropTable(
+                name: "UserShoppingList");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -265,7 +335,13 @@ namespace bagit_api.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "MockShoppingList");
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingLists");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

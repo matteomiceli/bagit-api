@@ -1,6 +1,8 @@
+using System.Text.Json.Serialization;
 using bagit_api.Data;
 using bagit_api.Hubs;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var AllowOrigins = "_allowOrigins";
@@ -23,7 +25,11 @@ builder.Services.AddCors(options =>
                         .AllowCredentials()
                       );
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(x =>
+        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

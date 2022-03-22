@@ -19,9 +19,33 @@ public class BagList
         _context = new BagItDbContext(optionsBuilder.Options);
     }
 
-    public void AddItem(Product product)
+    public void AddItem(string itemName, string quantity)
     {
-        _context.Products.Add(product);
+        
+        Console.WriteLine(itemName);
+        Console.WriteLine(quantity);
+        
+        
+        // TODO: Let caller pass these parameters in
+        int listId = 1;
+        int userId = 1;
+
+        var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+        var list = _context.ShoppingLists.FirstOrDefault(sl => sl.ListId == listId);
+
+        var product = new Product
+        {
+            Name = itemName,
+            Quantity = int.Parse(quantity)
+        };
+
+        var slProduct = new ShoppingListProduct
+        {
+            ListId = listId,
+            Product = product
+        };
+
+        _context.Add(slProduct);
         _context.SaveChanges();
     }
     public void DeleteItem(string name)
