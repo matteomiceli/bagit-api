@@ -40,7 +40,6 @@ public class BagList
     }
     public void DeleteItem(string name)
     {
-        Console.WriteLine(name);
         _context.Products.RemoveRange(_context.Products.Where(
             p => p.Name == name
             ));
