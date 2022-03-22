@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
 using bagit_api.Models;
-using System.Threading.Tasks;
 
 namespace bagit_api.Hubs;
 
@@ -14,6 +13,10 @@ public class ListHub : Hub
     public async Task RemoveItemFromList(string name)
     {
         TestList.List.DeleteItem(name);
+        await Clients.All.SendAsync("ItemsUpdated", TestList.List.GetList());
+    }
+
+    public async Task GetList(string Id) {
         await Clients.All.SendAsync("ItemsUpdated", TestList.List.GetList());
     }
 }

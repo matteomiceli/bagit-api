@@ -1,18 +1,15 @@
-using System.Linq;
+using System.Diagnostics;
 using bagit_api.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace bagit_api.Models;
 public class BagList
 {
-    //public int Id { get; set; }
-    public string? Owner { get; set; }
-    public List<Item>? Items = new List<Item>();
     private readonly BagItDbContext _context;
 
     public BagList()
     {
-        // TODO: Refactor this
+        // TODO: Refactor this 
         var optionsBuilder = new DbContextOptionsBuilder<BagItDbContext>();
         optionsBuilder.UseSqlite("DataSource=app.db;Cache=Shared");
 
@@ -21,18 +18,10 @@ public class BagList
 
     public void AddItem(string itemName, string quantity)
     {
-        
-        Console.WriteLine(itemName);
-        Console.WriteLine(quantity);
-        
-        
         // TODO: Let caller pass these parameters in
         int listId = 1;
         int userId = 1;
-
-        var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
-        var list = _context.ShoppingLists.FirstOrDefault(sl => sl.ListId == listId);
-
+        
         var product = new Product
         {
             Name = itemName,
@@ -47,6 +36,7 @@ public class BagList
 
         _context.Add(slProduct);
         _context.SaveChanges();
+        Console.WriteLine($"\nAdded Product: {itemName} x{quantity}");
     }
     public void DeleteItem(string name)
     {
@@ -55,6 +45,7 @@ public class BagList
             p => p.Name == name
             ));
         _context.SaveChanges();
+        Console.WriteLine($"\nDeleted Product: {name}");
     }
 
     public List<Product> GetList()

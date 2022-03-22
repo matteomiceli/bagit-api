@@ -11,7 +11,7 @@ using bagit_api.Data;
 namespace bagit_api.Data.Migrations
 {
     [DbContext(typeof(BagItDbContext))]
-    [Migration("20220321234154_M1")]
+    [Migration("20220322010459_M1")]
     partial class M1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,6 +70,13 @@ namespace bagit_api.Data.Migrations
                     b.HasKey("ListId");
 
                     b.ToTable("ShoppingLists");
+
+                    b.HasData(
+                        new
+                        {
+                            ListId = 1,
+                            Name = "Test Shopping List"
+                        });
                 });
 
             modelBuilder.Entity("bagit_api.Models.ShoppingListProduct", b =>
@@ -111,6 +118,9 @@ namespace bagit_api.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("TEXT");
 
@@ -120,6 +130,12 @@ namespace bagit_api.Data.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Username")
                         .HasMaxLength(70)
                         .HasColumnType("TEXT");
@@ -127,6 +143,14 @@ namespace bagit_api.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Email = "test@gmail.com",
+                            Username = "test_user"
+                        });
                 });
 
             modelBuilder.Entity("bagit_api.Models.UserShoppingList", b =>

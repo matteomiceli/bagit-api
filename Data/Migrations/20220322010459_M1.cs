@@ -96,7 +96,10 @@ namespace bagit_api.Data.Migrations
                     Address = table.Column<string>(type: "TEXT", nullable: true),
                     Phone = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    ModifiedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    LoginProvider = table.Column<string>(type: "TEXT", nullable: true),
+                    ProviderKey = table.Column<string>(type: "TEXT", nullable: true),
+                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,6 +259,16 @@ namespace bagit_api.Data.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "ShoppingLists",
+                columns: new[] { "ListId", "Description", "IsEditable", "IsPublic", "Name", "Notes" },
+                values: new object[] { 1, null, null, null, "Test Shopping List", null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "Address", "CreatedAt", "Email", "FirstName", "LastName", "LoginProvider", "ModifiedAt", "Password", "Phone", "ProviderDisplayName", "ProviderKey", "Username" },
+                values: new object[] { 1, null, null, "test@gmail.com", null, null, null, null, null, null, null, null, "test_user" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

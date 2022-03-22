@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace bagit_api.Models;
 
-public class User
+
+public class User : IdentityUserLogin<int>
 {
     [Key]
     public int UserId { get; set; }

@@ -9,6 +9,7 @@ public class BagItDbContext : IdentityDbContext
     public BagItDbContext(DbContextOptions<BagItDbContext> options)
         : base(options)
     {
+        
     }
     
     public DbSet<User> Users { get; set; }
@@ -17,6 +18,10 @@ public class BagItDbContext : IdentityDbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
+
+        // Seeders
+        modelBuilder.Entity<User>().HasData(SeedData.GetUser());
+        modelBuilder.Entity<ShoppingList>().HasData(SeedData.GetList());
 
         // Model n:m relationship  b/w Users and Shopping Lists
         modelBuilder.Entity<UserShoppingList>()
@@ -33,7 +38,6 @@ public class BagItDbContext : IdentityDbContext
             .HasForeignKey(sl => sl.ListId);
         
         
-        
         // Model n:m relationship  b/w Products and Shopping Lists
         modelBuilder.Entity<ShoppingListProduct>()
             .HasKey(slp => new { slp.ListId, slp.ProductId });
@@ -47,8 +51,6 @@ public class BagItDbContext : IdentityDbContext
             .HasOne(slp => slp.Product)
             .WithMany(p => p.ShoppingListProducts)
             .HasForeignKey(slp => slp.ProductId);
-        
-        
     }
     
 }
